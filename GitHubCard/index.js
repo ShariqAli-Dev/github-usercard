@@ -4,6 +4,11 @@
     https://api.github.com/users/<your name>
 */
 
+const request = axios.get('https://api.github.com/users/ShariqAli-Dev')
+.then(response => document.querySelector('.cards').appendChild(createGitCard(response.data)))
+.catch(error => console.log(error));
+
+
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -28,7 +33,13 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+followersArray.forEach(follower => {
+  axios.get(`https://api.github.com/users/${follower}`)
+  .then(response => document.querySelector('.cards').appendChild(createGitCard(response.data)))
+  .catch(error => console.log(error));
+});
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +60,52 @@ const followersArray = [];
       </div>
     </div>
 */
+
+const createGitCard = ({ avatar_url, name, login, location, html_url, followers, following, bio }) => {
+  // Creating Variables
+  const divCard = document.createElement('div');
+  const userImg = document.createElement('img');
+  const cardInfoDiv = document.createElement('div');
+  const h3 = document.createElement('h3');
+  const usernameP = document.createElement('p');
+  const locationP = document.createElement('p');
+  const profileP = document.createElement('p');
+  const profileA = document.createElement('a');
+  const followersP = document.createElement('p');
+  const followingP = document.createElement('p');
+  const bioP = document.createElement('p');
+  
+  // Assigning Content
+  divCard.classList.add('card');
+  userImg.src = avatar_url;
+  cardInfoDiv.classList.add('card-info');
+  h3.classList.add('name')
+  h3.textContent = name;
+  usernameP.classList.add('username');
+  usernameP.textContent = login;
+  locationP.textContent = `Location: ${location}`;
+  profileP.textContent = 'Profile:';
+  profileA.href = html_url;
+  profileA.textContent = html_url;
+  followersP.textContent = `Followers: ${followers}`
+  followingP.textContent = `Following: ${following}`
+  bioP.textContent = bio;
+
+  // Appending for structure
+  divCard.appendChild(userImg);
+  divCard.appendChild(cardInfoDiv);
+  cardInfoDiv.appendChild(h3);
+  cardInfoDiv.appendChild(usernameP);
+  cardInfoDiv.appendChild(locationP);
+  cardInfoDiv.appendChild(profileP);
+  profileP.appendChild(profileA);
+  cardInfoDiv.appendChild(followersP);
+  cardInfoDiv.appendChild(followingP);
+  cardInfoDiv.appendChild(bioP);
+
+  return divCard;
+}
+
 
 /*
   List of LS Instructors Github username's:
